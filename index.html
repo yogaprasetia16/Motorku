@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Servis Motor</title>
+<style>
+:root{--bg:#f2f2f7;--card:#fff;--tx:#000;--mu:#8e8e93;--sep:rgba(60,60,67,.16);--bl:#007aff;--g:#34c759;--y:#ff9500;--r:#ff3b30;--fill:rgba(120,120,128,.12);--glass:rgba(242,242,247,.78);
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#000;--card:#1c1c1e;--tx:#fff;--sep:rgba(84,84,88,.5);--bl:#0a84ff;--g:#30d158;--y:#ff9f0a;--r:#ff453a;--fill:rgba(120,120,128,.26);--glass:rgba(0,0,0,.72);color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#000;--card:#1c1c1e;--tx:#fff;--sep:rgba(84,84,88,.5);--bl:#0a84ff;--g:#30d158;--y:#ff9f0a;--r:#ff453a;--fill:rgba(120,120,128,.26);--glass:rgba(0,0,0,.72);color-scheme:dark}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{margin:0;background:var(--bg);color:var(--tx);font:17px/1.35 -apple-system,BlinkMacSystemFont,"SF Pro Text","Helvetica Neue",Roboto,Arial,sans-serif;-webkit-font-smoothing:antialiased}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:20;background:var(--glass);-webkit-backdrop-filter:blur(20px);backdrop-filter:blur(20px)}
+.nav{position:sticky;top:env(safe-area-inset-top,0px);z-index:19;display:flex;justify-content:space-between;padding:10px 20px;background:var(--glass);-webkit-backdrop-filter:blur(20px);backdrop-filter:blur(20px)}
+button{font:inherit;color:inherit;background:none;border:0;padding:0;cursor:pointer}
+.lnk{color:var(--bl)}.lnk.b{font-weight:600}
+main{max-width:560px;margin:0 auto;padding:0 16px 40px}
+h1{font-size:34px;font-weight:700;letter-spacing:-.4px;margin:6px 4px 0}
+.sub{color:var(--mu);margin:2px 4px 0;font-size:15px}
+.sec{font-size:13px;color:var(--mu);text-transform:uppercase;letter-spacing:.3px;margin:26px 16px 7px;font-weight:400}
+.card{background:var(--card);border-radius:14px;overflow:hidden}
+.pad{padding:18px 8px 8px}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px 4px}
+.tile{text-align:center;padding:0 2px}
+.ring{position:relative;width:64px;height:64px;margin:0 auto}
+.ring svg{width:64px;height:64px;transform:rotate(-90deg)}
+.ring circle{fill:none;stroke-width:5;stroke-linecap:round}
+.trk{stroke:var(--fill)}
+.prg{transition:stroke-dasharray .5s}
+.prg.c-g{stroke:var(--g)}.prg.c-y{stroke:var(--y)}.prg.c-r{stroke:var(--r)}.prg.c-n{stroke:none}
+.ring span{position:absolute;inset:0;display:grid;place-items:center;font-size:26px}
+.nm{font-size:13px;font-weight:600;margin-top:7px}
+.tl{font-size:12px;color:var(--mu);margin-top:1px}
+.tl.c-y{color:var(--y)}.tl.c-r{color:var(--r)}
+.stats{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:12px}
+.stat{background:var(--card);border-radius:14px;padding:14px 16px}
+.stat small{color:var(--mu);font-size:13px;display:block}
+.stat b{font-size:20px;font-weight:700;letter-spacing:-.2px}
+.row{display:flex;align-items:center;gap:12px;padding:12px 16px;position:relative;width:100%;text-align:left}
+.row+.row::before{content:"";position:absolute;top:0;left:16px;right:0;border-top:.5px solid var(--sep)}
+.row .l{flex:1;min-width:0}.row .l b{font-weight:600;display:block}
+.row .l small{color:var(--mu);font-size:14px;display:block}
+.row .rt{color:var(--mu);font-size:15px;white-space:nowrap}
+.empty{padding:18px 16px;color:var(--mu);text-align:center;font-size:15px}
+.hint{color:var(--mu);font-size:13px;margin:7px 16px 0}
+.scrim{position:fixed;inset:0;background:rgba(0,0,0,.35);opacity:0;pointer-events:none;transition:opacity .25s;z-index:30}
+.scrim.open{opacity:1;pointer-events:auto}
+.sheet{position:fixed;left:0;right:0;bottom:0;max-height:92%;overflow-y:auto;background:var(--bg);border-radius:20px 20px 0 0;z-index:31;transform:translateY(105%);transition:transform .32s cubic-bezier(.2,.8,.2,1);padding:0 16px calc(24px + env(safe-area-inset-bottom,0px));max-width:560px;margin:0 auto}
+.sheet.open{transform:none}
+.sh{position:sticky;top:0;background:var(--bg);display:flex;justify-content:space-between;align-items:center;padding:16px 4px 12px;z-index:2}
+.sh h3{margin:0;font-size:17px}
+.field{display:flex;align-items:center;gap:10px;padding:0 16px;min-height:46px;position:relative}
+.field+.field::before{content:"";position:absolute;top:0;left:16px;right:0;border-top:.5px solid var(--sep)}
+.field label{flex:none;width:92px}
+input,select,textarea{font:inherit;color:inherit;background:transparent;border:0;outline:0;min-width:0;width:100%}
+.field input,.field select{text-align:right;padding:11px 0}
+input[type=date],input[type=time]{text-align:right}
+.chips{display:flex;flex-wrap:wrap;gap:8px;padding:14px 16px}
+.chip{padding:7px 13px;border-radius:20px;background:var(--fill);font-size:15px}
+.chip.on{background:var(--bl);color:#fff}
+.btn{display:block;width:100%;padding:14px;border-radius:14px;background:var(--bl);color:#fff;font-weight:600;text-align:center;margin-top:18px}
+.btn.s{background:var(--card);color:var(--bl);margin-top:0}
+.rl{padding:12px 16px;position:relative}
+.rl+.rl::before{content:"";position:absolute;top:0;left:16px;right:0;border-top:.5px solid var(--sep)}
+.rl .top{display:flex;gap:8px;align-items:center}
+.rl .top input{font-weight:600}
+.rl .del{color:var(--r);font-size:15px}
+.rl .bot{display:flex;gap:10px;align-items:center;margin-top:6px;color:var(--mu);font-size:15px}
+.rl .bot input{width:64px;background:var(--fill);border-radius:8px;padding:6px 8px;text-align:center;color:var(--tx)}
+.rl .bot select{width:auto;background:var(--fill);border-radius:8px;padding:6px 8px;color:var(--tx)}
+textarea{padding:12px 16px;display:block}
+.pills{display:flex;gap:8px;overflow-x:auto;margin:14px 0 0;padding:2px 4px;scrollbar-width:none}
+.pill{flex:none;padding:7px 14px;border-radius:20px;background:var(--card);font-size:15px}
+.pill.on{background:var(--bl);color:#fff;font-weight:600}.pill.add{color:var(--bl)}
+</style>
+</head>
+<body>
+<div class="nav"><button class="lnk" id="openSet">Atur</button><button class="lnk b" id="openAdd">+ Catat</button></div>
+<main>
+  <h1 id="title">Servis Motor</h1>
+  <p class="sub" id="sub"></p>
+  <div class="pills" id="pills"></div>
+
+  <h2 class="sec">Status</h2>
+  <div class="card pad"><div class="grid" id="grid"></div></div>
+  <div class="hint">Ketuk ikon untuk mencatat servis komponen itu.</div>
+
+  <div class="stats">
+    <div class="stat"><small>Total biaya</small><b id="tot">Rp 0</b></div>
+    <div class="stat"><small>Tahun ini</small><b id="yr">Rp 0</b></div>
+  </div>
+
+  <h2 class="sec">Riwayat</h2>
+  <div class="card" id="logs"></div>
+  <div class="hint">Ketuk satu riwayat untuk menghapusnya.</div>
+</main>
+
+<div class="scrim" id="scrim"></div>
+
+<section class="sheet" id="sAdd">
+  <div class="sh"><button class="lnk" data-close>Batal</button><h3>Servis Baru</h3><button class="lnk b" id="saveLog">Simpan</button></div>
+  <div class="chips card" id="chips" style="margin-bottom:12px"></div>
+  <div class="card">
+    <div class="field"><label>Lainnya</label><input id="fOther" placeholder="lampu, kabel gas…"></div>
+    <div class="field"><label>Tanggal</label><input id="fDate" type="date"></div>
+    <div class="field"><label>Jam</label><input id="fTime" type="time"></div>
+    <div class="field"><label>Biaya</label><input id="fCost" type="number" inputmode="numeric" placeholder="Rp"></div>
+    <div class="field"><label>Bengkel</label><input id="fPlace" placeholder="Opsional"></div>
+    <div class="field"><label>Catatan</label><input id="fNote" placeholder="Opsional"></div>
+  </div>
+</section>
+
+<section class="sheet" id="sSet">
+  <div class="sh"><span style="width:50px"></span><h3>Pengaturan</h3><button class="lnk b" data-close>Selesai</button></div>
+  <h2 class="sec" style="margin-top:6px">Motor</h2>
+  <div class="card">
+    <div class="field"><label>Nama</label><input id="mName" placeholder="Honda Vario 125"></div>
+    <div class="field"><label>Plat</label><input id="mPlate" placeholder="B 1234 XYZ"></div>
+  </div>
+  <button class="btn s" id="delMotor" style="color:var(--r);margin-top:10px">Hapus motor ini</button>
+  <h2 class="sec">Interval servis</h2>
+  <div class="card" id="rules"></div>
+  <button class="btn s" id="addRule" style="margin-top:10px">Tambah komponen</button>
+  <h2 class="sec">Cadangan data</h2>
+  <div class="card"><textarea id="bk" rows="4" placeholder="Teks cadangan muncul di sini"></textarea></div>
+  <div style="display:flex;gap:10px;margin-top:10px">
+    <button class="btn s" id="bkCopy">Buat &amp; salin</button><button class="btn s" id="bkLoad">Pulihkan</button>
+  </div>
+  <div class="hint">Data tersimpan di browser ini. Simpan teks cadangan di tempat aman.</div>
+</section>
+
+<script>
+const KEY="servis-motor-v1";
+const DEF={motor:{name:"",plate:""},logs:[],rules:[
+{name:"Oli mesin",days:90},{name:"Oli gardan",days:180},{name:"Filter udara",days:365},
+{name:"Busi",days:365},{name:"Kampas rem",days:540},{name:"V-belt / rantai",days:730},
+{name:"Aki",days:730},{name:"Ban",days:1095}]};
+let ALL,S;
+function norm(d){
+  if(d&&d.motors&&d.motors.length)return d;
+  const o=d&&d.motor?d:JSON.parse(JSON.stringify(DEF));
+  return{cur:1,motors:[{id:1,name:o.motor.name||"",plate:o.motor.plate||"",logs:o.logs||[],rules:o.rules||[]}]};
+}
+try{ALL=norm(JSON.parse(localStorage.getItem(KEY)))}catch(e){ALL=norm(null)}
+function pick(id){const m=ALL.motors.find(x=>x.id===id)||ALL.motors[0];ALL.cur=m.id;S={motor:m,logs:m.logs,rules:m.rules}}
+pick(ALL.cur);
+function save(){try{localStorage.setItem(KEY,JSON.stringify(ALL))}catch(e){}}
+const $=id=>document.getElementById(id);
+const rp=n=>"Rp "+Number(n||0).toLocaleString("id-ID");
+const today=()=>{const d=new Date();return new Date(d-d.getTimezoneOffset()*6e4).toISOString().slice(0,10)};
+const nowT=()=>new Date().toTimeString().slice(0,5);
+const ts=l=>new Date(l.date+"T"+(l.time||"00:00"));
+const MULT={hari:1,bulan:30,tahun:365};
+const unitOf=r=>r.u||(r.days&&r.days%365===0?"tahun":r.days&&r.days%30===0?"bulan":"hari");
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+function icon(n){n=n.toLowerCase();return n.includes("oli")?"🛢️":n.includes("filter")?"🌬️":n.includes("busi")?"⚡":n.includes("rem")?"🛑":/belt|rantai|cvt/.test(n)?"⛓️":n.includes("aki")?"🔋":n.includes("ban")?"🛞":"🔧"}
+function dur(d){const a=Math.abs(d);if(a<2)return Math.max(1,Math.round(a*24))+" jam";if(a>=365)return (a/365).toFixed(1).replace(".0","")+" tahun";if(a>=60)return Math.round(a/30)+" bulan";return Math.round(a)+" hari"}
+function lastFor(name){return S.logs.filter(x=>x.items.includes(name)).sort((a,b)=>ts(b)-ts(a))[0]}
+function st(r){
+  const l=lastFor(r.name);
+  if(!l)return{c:"n",f:0,t:"Belum dicatat"};
+  if(!r.days)return{c:"n",f:0,t:"Atur interval"};
+  const left=r.days-(Date.now()-ts(l))/864e5,f=Math.max(0,Math.min(1,left/r.days));
+  return{c:left<=0?"r":f<=.15?"y":"g",f:left<=0?1:f,t:left>0?dur(left)+" lagi":"Lewat "+dur(left)};
+}
+function render(){
+  $("title").textContent=S.motor.name||"Servis Motor";
+  $("sub").textContent=S.motor.plate||"Catatan servis pribadi";
+  $("pills").innerHTML=ALL.motors.map(m=>`<button class="pill${m.id===ALL.cur?" on":""}" data-id="${m.id}">${esc(m.name||"Motor")}</button>`).join("")+'<button class="pill add" id="addMotor">+ Motor</button>';
+  $("mName").value=S.motor.name;$("mPlate").value=S.motor.plate;
+  $("grid").innerHTML=S.rules.map(r=>{const s=st(r);
+    return `<button class="tile" data-n="${esc(r.name)}"><div class="ring"><svg viewBox="0 0 64 64"><circle class="trk" cx="32" cy="32" r="28"/><circle class="prg c-${s.c}" cx="32" cy="32" r="28" style="stroke-dasharray:${(s.f*175.9).toFixed(1)} 175.9"/></svg><span>${icon(r.name)}</span></div><div class="nm">${esc(r.name)}</div><div class="tl c-${s.c}">${s.t}</div></button>`}).join("")||'<div class="empty" style="grid-column:1/-1">Belum ada komponen.</div>';
+  $("chips").innerHTML=S.rules.map(r=>`<button class="chip" data-n="${esc(r.name)}">${esc(r.name)}</button>`).join("");
+  const total=S.logs.reduce((a,l)=>a+(+l.cost||0),0),y=today().slice(0,4);
+  $("tot").textContent=rp(total);
+  $("yr").textContent=rp(S.logs.filter(l=>l.date.startsWith(y)).reduce((a,l)=>a+(+l.cost||0),0));
+  const sorted=[...S.logs].sort((a,b)=>ts(b)-ts(a));
+  $("logs").innerHTML=sorted.map(l=>`<button class="row" data-del="${l.id}"><div class="l"><b>${esc(l.items.join(", ")||"-")}</b><small>${esc(l.date)}${l.time?" · "+esc(l.time):""}${l.place?" · "+esc(l.place):""}</small>${l.note?`<small>${esc(l.note)}</small>`:""}</div><div class="rt">${l.cost?rp(l.cost):""}</div></button>`).join("")||'<div class="empty">Belum ada riwayat servis.</div>';
+  $("rules").innerHTML=S.rules.map((r,i)=>{const u=unitOf(r),v=Math.round(r.days/MULT[u]*10)/10;
+    return `<div class="rl"><div class="top"><input data-i="${i}" data-k="name" value="${esc(r.name)}"><button class="del" data-rm="${i}">Hapus</button></div><div class="bot">Tiap<input data-i="${i}" data-k="t" type="number" inputmode="decimal" value="${v}"><select data-i="${i}" data-k="u">${Object.keys(MULT).map(k=>`<option ${k===u?"selected":""}>${k}</option>`).join("")}</select></div></div>`}).join("");
+}
+function openSheet(id){$(id).classList.add("open");$("scrim").classList.add("open")}
+function closeSheets(){document.querySelectorAll(".sheet").forEach(s=>s.classList.remove("open"));$("scrim").classList.remove("open")}
+function openAdd(name){
+  $("fDate").value=today();$("fTime").value=nowT();
+  document.querySelectorAll("#chips .chip").forEach(c=>c.classList.toggle("on",c.dataset.n===name));
+  openSheet("sAdd");
+}
+$("openAdd").onclick=()=>openAdd();
+$("openSet").onclick=()=>openSheet("sSet");
+$("scrim").onclick=closeSheets;
+document.querySelectorAll("[data-close]").forEach(b=>b.onclick=closeSheets);
+$("grid").onclick=e=>{const t=e.target.closest(".tile");if(t)openAdd(t.dataset.n)};
+$("chips").onclick=e=>{const c=e.target.closest(".chip");if(c)c.classList.toggle("on")};
+$("saveLog").onclick=()=>{
+  const items=[...document.querySelectorAll("#chips .chip.on")].map(c=>c.dataset.n)
+    .concat($("fOther").value.split(",").map(s=>s.trim()).filter(Boolean));
+  if(!items.length){alert("Pilih atau isi minimal satu pekerjaan servis.");return}
+  S.logs.push({id:Date.now(),date:$("fDate").value||today(),time:$("fTime").value,items,cost:+$("fCost").value||0,place:$("fPlace").value.trim(),note:$("fNote").value.trim()});
+  ["fOther","fCost","fPlace","fNote"].forEach(i=>$(i).value="");
+  save();render();closeSheets();
+};
+$("logs").onclick=e=>{const b=e.target.closest("[data-del]");if(b&&confirm("Hapus catatan servis ini?")){const i=S.logs.findIndex(l=>l.id==b.dataset.del);if(i>-1)S.logs.splice(i,1);save();render()}};
+$("mName").onchange=e=>{S.motor.name=e.target.value.trim();save();render()};
+$("mPlate").onchange=e=>{S.motor.plate=e.target.value.trim();save();render()};
+$("rules").onchange=e=>{const t=e.target,i=t.dataset.i;if(i==null)return;const r=S.rules[i];
+  if(t.dataset.k==="name")r.name=t.value.trim();
+  else{const c=t.closest(".rl"),v=+c.querySelector('[data-k="t"]').value||0,u=c.querySelector('[data-k="u"]').value;r.u=u;r.days=Math.round(v*MULT[u])}
+  save();render()};
+$("rules").onclick=e=>{const i=e.target.dataset.rm;if(i!=null&&confirm("Hapus komponen ini?")){S.rules.splice(i,1);save();render()}};
+$("addRule").onclick=()=>{const n=prompt("Nama komponen:");if(n&&n.trim()){S.rules.push({name:n.trim(),days:90});save();render()}};
+$("bkCopy").onclick=async()=>{$("bk").value=JSON.stringify(ALL);try{await navigator.clipboard.writeText($("bk").value)}catch(e){$("bk").select()}};
+$("bkLoad").onclick=()=>{try{const p=JSON.parse($("bk").value);if(!p||!(p.motors||p.motor))throw 0;const d=norm(p);if(confirm("Timpa data saat ini dengan cadangan?")){ALL=d;pick(ALL.cur);save();render()}}catch(e){alert("Teks cadangan tidak valid.")}};
+$("pills").onclick=e=>{const b=e.target.closest(".pill");if(!b)return;
+  if(b.id==="addMotor"){const n=prompt("Nama motor baru:");if(!n||!n.trim())return;const id=Date.now();ALL.motors.push({id,name:n.trim(),plate:"",logs:[],rules:JSON.parse(JSON.stringify(DEF.rules))});pick(id);save();render();openSheet("sSet")}
+  else{pick(+b.dataset.id);save();render()}};
+$("delMotor").onclick=()=>{if(ALL.motors.length<2){alert("Minimal harus ada satu motor.");return}
+  if(confirm("Hapus motor ini beserta seluruh riwayatnya?")){ALL.motors=ALL.motors.filter(m=>m.id!==ALL.cur);pick(ALL.motors[0].id);save();render();closeSheets()}};
+render();
+</script>
+</body>
+</html>
